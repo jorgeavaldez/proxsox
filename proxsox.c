@@ -6,6 +6,56 @@
 #include <unistd.h> /* read, write, close */
 #include <string.h> /* memcpy, memset */
 
+// open ssl bc smu uses https
+#include <openssl/ssl.h>
+
+void makeSSLRequest () {
+  struct addrinfo hints, *res;
+  int sockfd;
+
+  char buf[2056];
+  int byte_count;
+
+  memset(&hints, 0, sizeof hints);
+  hints.ai_family=AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+
+  getaddrinfo("www.smu.edu", "443", &hints, &res);
+
+  sockfd = socket(
+                  res->ai_family,
+                  res->ai_socktype,
+                  res->ai_protocol);
+
+  printf("Connecting...\n");
+
+  connect(
+          sockfd,
+          res->ai_addr,
+          res->ai_addrlen);
+
+  // set up openssl
+  SSL_load_error_strings();
+  SSL_library_init();
+  // ssl_ctx needs to be a global var
+  SSL_CTX *ssl_ctx = SSL_CTX_new(SSLv23_client_method());
+
+  // create an ssl connection and attach it to the socket
+  SSL *conn = SSL_new(ssl_ctx);
+  SSL_set_fd(conn, sockfd);
+
+  // perform the handshake
+  int err = SSL_connect(conn);
+  if (err != 1) {
+    printf("Handshake failed, value of %d", err);
+    exit(1);
+  }
+
+  else {
+    printf("Handshake succeeded my dude");
+  }
+}
+
 void makeRequest() {
   struct addrinfo hints, *res;
   int sockfd;
@@ -17,7 +67,7 @@ void makeRequest() {
   hints.ai_family=AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
 
-  getaddrinfo("http://www.smu.edu", "80", &hints, &res);
+  getaddrinfo("www.smu.edu", "80", &hints, &res);
 
   sockfd = socket(
                   res->ai_family,
@@ -46,6 +96,6 @@ void makeRequest() {
 
 int main(void) {
   printf("Let's go!!!\n");
-  makeRequest();
+  makeSSLRequest();
   return 0;
 }

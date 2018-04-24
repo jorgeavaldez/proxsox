@@ -1,5 +1,5 @@
 TARGET = proxsox
-LIBS = -lm
+LIBS = -lm -lssl
 CC = gcc
 CFLAGS = -g -Wall
 
