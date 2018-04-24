@@ -17,7 +17,7 @@ void makeSSLRequest () {
   int byte_count;
 
   memset(&hints, 0, sizeof hints);
-  hints.ai_family=AF_UNSPEC;
+  hints.ai_family=AF_INET;
   hints.ai_socktype = SOCK_STREAM;
 
   getaddrinfo("www.smu.edu", "443", &hints, &res);
@@ -37,6 +37,7 @@ void makeSSLRequest () {
   // set up openssl
   SSL_load_error_strings();
   SSL_library_init();
+
   // ssl_ctx needs to be a global var
   SSL_CTX *ssl_ctx = SSL_CTX_new(SSLv23_client_method());
 
@@ -53,7 +54,19 @@ void makeSSLRequest () {
 
   else {
     printf("Handshake succeeded my dude");
+    printf("connected");
   }
+
+  // use the ssl functions instead of the defaults to read
+  char *header = "GET / HTTP/1.1\r\nHost: www.smu.edu\r\n\r\n";
+  SSL_write(conn, header, strlen(header));
+
+  printf("Request to www.smu.edu sent...\n");
+
+  // receive data
+  byte_count = SSL_read(conn, buf, sizeof(buf));
+  printf("recv()'d %d bytes of data in buf\n", byte_count);
+  printf("%.*s", byte_count, buf);
 }
 
 void makeRequest() {
