@@ -17,7 +17,7 @@ void makeRequest() {
   hints.ai_family=AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
 
-  getaddrinfo("www.smu.edu", "80", &hints, &res);
+  getaddrinfo("http://www.smu.edu", "80", &hints, &res);
 
   sockfd = socket(
                   res->ai_family,
@@ -33,9 +33,8 @@ void makeRequest() {
 
   printf("Connected!\n");
 
-  char *header = "GET / HTTP/1.1\r\nHost: smu.edu\r\n\r\n";
-  printf(header);
-  send(sockfd, header, sizeof(header), 0);
+  char *header = "GET / HTTP/1.1\r\nHost: www.smu.edu\r\n\r\n";
+  send(sockfd, header, strlen(header), 0);
 
   printf("Request to www.smu.edu sent...\n");
 
