@@ -12,3 +12,8 @@ docker.
 
 First, build the container with ```docker build -t proxsox .```
 Then, you can run the container with ```docker run -it --rm --name run-proxsox proxsox```
+
+## references
+- [stackoverflow thread on http requests in c](https://stackoverflow.com/questions/30470505/http-request-using-sockets-in-c?rq=1)
+- [stackoverflow thread on makefiles](https://stackoverflow.com/questions/1484817/how-do-i-make-a-simple-makefile-for-gcc-on-linux)
+- [the gcc docker image](https://hub.docker.com/_/gcc/)
