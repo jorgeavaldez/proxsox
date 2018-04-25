@@ -56,14 +56,17 @@ void makeSSLRequest (char* buf) {
     printf("Handshake succeeded my dude\n");
     printf("connected\n");
   }
+
+  // The get request for smu
   char* usr_header = "GET / HTTP/1.1\r\nHost: www.smu.edu\r\n\r\n";
+
   // use the ssl functions instead of the defaults to read
   printf("Sending request %s to www.smu.edu\n", usr_header);
   SSL_write(conn, usr_header, strlen(usr_header));
 
   printf("Request to www.smu.edu sent...\n");
 
-  // receive data
+  // receive data and write it to the server_res
   byte_count = SSL_read(conn, buf, 4096);
   printf("recv()'d %d bytes of data in buf\n", byte_count);
   //printf("%.*s\n", byte_count, buf);
@@ -125,6 +128,9 @@ void createServer() {
   //printf("Request to remote received: %.*s\n", (int)sizeof(server_res), server_res);
   printf("Request to remote received: %s\n", server_res);
 
+  // send server_res back to the user
+  valread = send(new_sock, server_res, strlen(server_res), 0);
+  printf("Responded");
 }
 
 int main(void) {
