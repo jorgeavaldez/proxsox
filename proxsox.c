@@ -57,7 +57,7 @@ void createServer() {
     exit(1);
   }
 
-  valread = read(new_sock, buf, 2056);
+  valread = recv(new_sock, buf, 2056, 0);
   printf("%s\n", buf);
 }
 
