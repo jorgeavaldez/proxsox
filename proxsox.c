@@ -13,59 +13,10 @@
 
 SSL_CTX *ssl_ctx;
 
-void createServer() {
-  int serverfd, new_sock, valread;
-  struct sockaddr_in address;
-
-  int opt = 1;
-  int addrlen = sizeof(address);
-
-  char buf[2056] = {0};
-  char *server_res;
-
-  // create the socket
-  if ((serverfd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-    printf("failed creating server socket");
-    exit(1);
-  }
-
-  // set options to bind to the port
-  if (setsockopt(serverfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
-                 &opt, sizeof(opt))) {
-    printf("setsockopt failed");
-    exit(1);
-  }
-
-  address.sin_family = AF_INET;
-  address.sin_addr.s_addr = INADDR_ANY;
-  address.sin_port = htons(PORT);
-
-  if (bind(serverfd, (struct sockaddr *)&address,
-           sizeof(address)) < 0) {
-    printf("binding to port failed");
-    exit(1);
-  }
-
-  if (listen(serverfd, 3) < 0) {
-    printf("listen failed");
-    exit(1);
-  }
-
-  if ((new_sock = accept(serverfd, (struct sockaddr *)&address,
-                           (socklen_t*)&addrlen)) < 0) {
-    printf("accept failed");
-    exit(1);
-  }
-
-  valread = recv(new_sock, buf, 2056, 0);
-  printf("%s\n", buf);
-}
-
-void makeSSLRequest () {
+void makeSSLRequest (char* buf) {
   struct addrinfo hints, *res;
   int sockfd;
 
-  char buf[2056];
   int byte_count;
 
   memset(&hints, 0, sizeof hints);
@@ -102,20 +53,78 @@ void makeSSLRequest () {
   }
 
   else {
-    printf("Handshake succeeded my dude");
-    printf("connected");
+    printf("Handshake succeeded my dude\n");
+    printf("connected\n");
   }
-
+  char* usr_header = "GET / HTTP/1.1\r\nHost: www.smu.edu\r\n\r\n";
   // use the ssl functions instead of the defaults to read
-  char *header = "GET / HTTP/1.1\r\nHost: www.smu.edu\r\n\r\n";
-  SSL_write(conn, header, strlen(header));
+  printf("Sending request %s to www.smu.edu\n", usr_header);
+  SSL_write(conn, usr_header, strlen(usr_header));
 
   printf("Request to www.smu.edu sent...\n");
 
   // receive data
-  byte_count = SSL_read(conn, buf, sizeof(buf));
+  byte_count = SSL_read(conn, buf, 4096);
   printf("recv()'d %d bytes of data in buf\n", byte_count);
-  printf("%.*s", byte_count, buf);
+  //printf("%.*s\n", byte_count, buf);
+  printf("%s\n", buf);
+}
+
+void createServer() {
+  int serverfd, new_sock, valread;
+  struct sockaddr_in address;
+
+  int opt = 1;
+  int addrlen = sizeof(address);
+
+  char buf[2056] = {0};
+  // don't initialize so we can strlen
+  char server_res[4096];
+
+  // create the socket
+  if ((serverfd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+    printf("failed creating server socket");
+    exit(1);
+  }
+
+  // set options to bind to the port
+  if (setsockopt(serverfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+                 &opt, sizeof(opt))) {
+    printf("setsockopt failed");
+    exit(1);
+  }
+
+  address.sin_family = AF_INET;
+  address.sin_addr.s_addr = INADDR_ANY;
+  address.sin_port = htons(PORT);
+
+  if (bind(serverfd, (struct sockaddr *)&address,
+           sizeof(address)) < 0) {
+    printf("binding to port failed");
+    exit(1);
+  }
+
+  printf("Server listening at port %d\n", PORT);
+  if (listen(serverfd, 3) < 0) {
+    printf("listen failed");
+    exit(1);
+  }
+
+  if ((new_sock = accept(serverfd, (struct sockaddr *)&address,
+                           (socklen_t*)&addrlen)) < 0) {
+    printf("accept failed");
+    exit(1);
+  }
+
+  valread = recv(new_sock, buf, sizeof(buf), 0);
+  printf("Server recv()'d %d bytes of data in buf\n", valread);
+  printf("Server Received: %.*s\n", valread, buf);
+
+  // now use the value in buf as the header for the next request
+  makeSSLRequest(server_res);
+  //printf("Request to remote received: %.*s\n", (int)sizeof(server_res), server_res);
+  printf("Request to remote received: %s\n", server_res);
+
 }
 
 int main(void) {
