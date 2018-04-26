@@ -79,7 +79,7 @@ void makeSSLRequest (char* server_res) {
   printf("Constructing response buffer...\n");
 
   int expected_byte_count = SSL_peek(conn, buf, 100);
-  while (expected_byte_count > 14) {
+  while (expected_byte_count > 15) {
     byte_count = SSL_read(conn, buf, 100);
     printf("\nbyte_count: %d\n", byte_count);
     err = SSL_get_error(conn, byte_count);
@@ -116,10 +116,10 @@ void makeSSLRequest (char* server_res) {
   byte_count = SSL_read(conn, buf, SSL_peek(conn, buf, expected_byte_count));
   total_byte_count = total_byte_count + byte_count;
   printf("%.*s\n", byte_count, buf);
-  printf("recv()'d %d bytes of data in buf\n", total_byte_count);
+  printf("\n\nrecv()'d %d bytes of data in buf\n", total_byte_count);
 
   strcat(server_res, buf);
-  printf("\n\nULTIMATERESPONSE\n\n%.*s\n", total_byte_count, server_res);
+  //printf("\n\nULTIMATERESPONSE\n\n%.*s\n", total_byte_count, server_res);
 }
 
 void createServer() {
