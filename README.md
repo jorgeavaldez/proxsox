@@ -13,6 +13,15 @@ docker.
 First, build the container with ```docker build -t proxsox .```
 Then, you can run the container with ```docker run -it --rm --name run-proxsox proxsox```
 
+## notes
+- server is able to run and then subsequently trigger a request to smu.edu
+- i'm able to get the response from smu.edu and save the responses packet by
+  packet within a buffer
+- now i need to construct a mega buffer with the entire contents of the response
+  inside
+- once that's done, i'm returning correctly, so i'll be good to turn in
+  :neckbeard:
+
 ## references
 - [stackoverflow thread on http requests in c](https://stackoverflow.com/questions/30470505/http-request-using-sockets-in-c?rq=1)
 - [stackoverflow thread on makefiles](https://stackoverflow.com/questions/1484817/how-do-i-make-a-simple-makefile-for-gcc-on-linux)
