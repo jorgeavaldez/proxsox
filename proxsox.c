@@ -13,11 +13,13 @@
 
 SSL_CTX *ssl_ctx;
 
-void makeSSLRequest (char* buf) {
+void makeSSLRequest (char* server_res) {
   struct addrinfo hints, *res;
   int sockfd;
 
   int byte_count, total_byte_count;
+
+  char buf[101] = {0};
 
   memset(&hints, 0, sizeof hints);
   hints.ai_family=AF_INET;
@@ -70,6 +72,9 @@ void makeSSLRequest (char* buf) {
   byte_count = SSL_read(conn, buf, 100);
   total_byte_count = byte_count;
 
+  // copy the buffer into the ultimate response
+  strcpy(server_res, buf);
+
   printf("recv()'d %d bytes of data in buf\n", byte_count);
   printf("Constructing response buffer...\n");
 
@@ -83,11 +88,12 @@ void makeSSLRequest (char* buf) {
       case(SSL_ERROR_NONE):
         total_byte_count = total_byte_count + byte_count;
         printf("%.*s\n", byte_count, buf);
+        strcat(server_res, buf);
         //printf("recv()'d %d bytes of data in buf\n", total_byte_count);
 
         break;
 
-      case(SSL_ERROR_ZERO_RETURN):
+    case(SSL_ERROR_ZERO_RETURN):
         printf("ZERO RETURN");
         break;
 
@@ -112,7 +118,8 @@ void makeSSLRequest (char* buf) {
   printf("%.*s\n", byte_count, buf);
   printf("recv()'d %d bytes of data in buf\n", total_byte_count);
 
-  //printf("%s\n", buf);
+  strcat(server_res, buf);
+  printf("\n\nULTIMATERESPONSE\n\n%.*s\n", total_byte_count, server_res);
 }
 
 void createServer() {
@@ -124,7 +131,7 @@ void createServer() {
 
   char buf[2056] = {0};
   // strnlen doesn't help like it should, i just hardcoded the length
-  char server_res[8192] = {0};
+  char server_res[50888] = {0};
 
   // create the socket
   if ((serverfd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
