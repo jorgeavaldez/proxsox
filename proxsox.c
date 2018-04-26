@@ -17,7 +17,7 @@ void makeSSLRequest (char* buf) {
   struct addrinfo hints, *res;
   int sockfd;
 
-  int byte_count;
+  int byte_count, total_byte_count;
 
   memset(&hints, 0, sizeof hints);
   hints.ai_family=AF_INET;
@@ -38,8 +38,8 @@ void makeSSLRequest (char* buf) {
           res->ai_addrlen);
 
   // set up openssl
-  SSL_load_error_strings();
   SSL_library_init();
+  SSL_load_error_strings();
 
   // create an ssl connection and attach it to the socket
   SSL *conn = SSL_new(ssl_ctx);
@@ -67,10 +67,52 @@ void makeSSLRequest (char* buf) {
   printf("Request to www.smu.edu sent...\n");
 
   // receive data and write it to the server_res
-  byte_count = SSL_read(conn, buf, 4096);
+  byte_count = SSL_read(conn, buf, 100);
+  total_byte_count = byte_count;
+
   printf("recv()'d %d bytes of data in buf\n", byte_count);
-  //printf("%.*s\n", byte_count, buf);
-  printf("%s\n", buf);
+  printf("Constructing response buffer...\n");
+
+  int expected_byte_count = SSL_peek(conn, buf, 100);
+  while (expected_byte_count > 14) {
+    byte_count = SSL_read(conn, buf, 100);
+    printf("\nbyte_count: %d\n", byte_count);
+    err = SSL_get_error(conn, byte_count);
+
+    switch(err){
+      case(SSL_ERROR_NONE):
+        total_byte_count = total_byte_count + byte_count;
+        printf("%.*s\n", byte_count, buf);
+        //printf("recv()'d %d bytes of data in buf\n", total_byte_count);
+
+        break;
+
+      case(SSL_ERROR_ZERO_RETURN):
+        printf("ZERO RETURN");
+        break;
+
+      case(SSL_ERROR_WANT_READ):
+        printf("WANT_READ");
+        break;
+
+      case(SSL_ERROR_WANT_CONNECT):
+        printf("WANT CONNECT");
+        break;
+
+      default:
+        printf("default? \n");
+        break;
+    }
+
+    expected_byte_count = SSL_peek(conn, buf, 100);
+  }
+
+  byte_count = SSL_read(conn, buf, SSL_peek(conn, buf, expected_byte_count));
+  total_byte_count = total_byte_count + byte_count;
+  printf("%.*s\n", byte_count, buf);
+  printf("recv()'d %d bytes of data in buf\n", total_byte_count);
+
+  //printf("%s\n", buf);
 }
 
 void createServer() {
@@ -81,8 +123,8 @@ void createServer() {
   int addrlen = sizeof(address);
 
   char buf[2056] = {0};
-  // don't initialize so we can strlen
-  char server_res[4096];
+  // strnlen doesn't help like it should, i just hardcoded the length
+  char server_res[8192] = {0};
 
   // create the socket
   if ((serverfd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
@@ -126,7 +168,7 @@ void createServer() {
   // now use the value in buf as the header for the next request
   makeSSLRequest(server_res);
   //printf("Request to remote received: %.*s\n", (int)sizeof(server_res), server_res);
-  printf("Request to remote received: %s\n", server_res);
+  // printf("Request to remote received: %s\n", server_res);
 
   // send server_res back to the user
   valread = send(new_sock, server_res, strlen(server_res), 0);
