@@ -1,7 +1,20 @@
 # proxsox
 proxy server in c using sockets and openssl
 requests to localhost:8080 will return the response of a get request to smu.edu
-this is my submission for networks homework 6
+this is my submission for **networks homework 6**
+
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+  - [quickstart](#quickstart)
+  - [output](#output)
+  - [how to run](#how-to-run)
+      - [local build](#local-build)
+      - [docker build](#docker-build)
+  - [references](#references)
+
+<!-- markdown-toc end -->
+
 
 ## quickstart
 _assuming you have docker installed on your computer_
@@ -12,6 +25,13 @@ docker run -it --rm --name run -p 8080:8080 proxsox
 
 this will start the server listening on port 8080, then follow the onscreen
 prompts for any other info
+
+## output
+**Program output while running**
+![Sample program output](./sample-output.png)
+
+**Program response page**
+![Rendered response page](./response-page.png)
 
 ## how to run
 since i have a windows computer, development and testing has been done using
