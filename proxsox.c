@@ -32,7 +32,7 @@ void makeSSLRequest (char* server_res) {
                   res->ai_socktype,
                   res->ai_protocol);
 
-  printf("Connecting...\n");
+  printf("Establishing socket connection to https://www.smu.edu...\n");
 
   connect(
           sockfd,
@@ -55,18 +55,18 @@ void makeSSLRequest (char* server_res) {
   }
 
   else {
-    printf("Handshake succeeded my dude\n");
-    printf("connected\n");
+    printf("Established ssl connection with https://smu.edu\n");
+    printf("Ready to send get request\n\n");
   }
 
   // The get request for smu
   char* usr_header = "GET / HTTP/1.1\r\nHost: www.smu.edu\r\n\r\n";
 
   // use the ssl functions instead of the defaults to read
-  printf("Sending request %s to www.smu.edu\n", usr_header);
+  printf("Sending request to https://www.smu.edu\n\n%s", usr_header);
   SSL_write(conn, usr_header, strlen(usr_header));
 
-  printf("Request to www.smu.edu sent...\n");
+  printf("Request to https://www.smu.edu sent...\n");
 
   // receive data and write it to the server_res
   byte_count = SSL_read(conn, buf, 100);
@@ -75,19 +75,20 @@ void makeSSLRequest (char* server_res) {
   // copy the buffer into the ultimate response
   strcpy(server_res, buf);
 
-  printf("recv()'d %d bytes of data in buf\n", byte_count);
-  printf("Constructing response buffer...\n");
+  // printf("recv()'d %d bytes of data in buf\n", byte_count);
+  printf("\nReading response from https://www.smu.edu\n");
+  printf("Constructing response buffer...\n\n");
 
   int expected_byte_count = SSL_peek(conn, buf, 100);
   while (expected_byte_count > 15) {
     byte_count = SSL_read(conn, buf, 100);
-    printf("\nbyte_count: %d\n", byte_count);
+    //printf("\nbyte_count: %d\n", byte_count);
     err = SSL_get_error(conn, byte_count);
 
     switch(err){
       case(SSL_ERROR_NONE):
         total_byte_count = total_byte_count + byte_count;
-        printf("%.*s\n", byte_count, buf);
+        //printf("%.*s\n", byte_count, buf);
         strcat(server_res, buf);
         //printf("recv()'d %d bytes of data in buf\n", total_byte_count);
 
@@ -115,8 +116,8 @@ void makeSSLRequest (char* server_res) {
 
   byte_count = SSL_read(conn, buf, SSL_peek(conn, buf, expected_byte_count));
   total_byte_count = total_byte_count + byte_count;
-  printf("%.*s\n", byte_count, buf);
-  printf("\n\nrecv()'d %d bytes of data in buf\n", total_byte_count);
+  //printf("%.*s\n", byte_count, buf);
+  printf("Received %d total bytes of data from https://www.smu.edu\n\n", total_byte_count);
 
   strcat(server_res, buf);
   //printf("\n\nULTIMATERESPONSE\n\n%.*s\n", total_byte_count, server_res);
@@ -168,18 +169,22 @@ void createServer() {
     exit(1);
   }
 
+  printf("Server received request...\n");
+
   valread = recv(new_sock, buf, sizeof(buf), 0);
-  printf("Server recv()'d %d bytes of data in buf\n", valread);
-  printf("Server Received: %.*s\n", valread, buf);
+  //printf("Server recv()'d %d bytes of data in buf\n", valread);
+  printf("Server received the following request from the client: %.*s\n\n", valread, buf);
 
   // now use the value in buf as the header for the next request
   makeSSLRequest(server_res);
   //printf("Request to remote received: %.*s\n", (int)sizeof(server_res), server_res);
   // printf("Request to remote received: %s\n", server_res);
 
+  printf("Server ready to respond...\n\n");
+
   // send server_res back to the user
   valread = send(new_sock, server_res, strlen(server_res), 0);
-  printf("Responded");
+  printf("Server responded yay!");
 }
 
 int main(void) {
