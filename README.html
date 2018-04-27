@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" integrity="sha384-TEMocfGvRuD1rIAacqrknm5BQZ7W7uWitoih+jMNFXQIbNl16bO8OZmylH/Vi/Ei" crossorigin="anonymous">
+        <style>
+/*--------------------------------------------------------------------------------------------- * Copyright (c) Microsoft Corporation. All rights reserved. * Licensed under the MIT License. See License.txt in the project root for license information. *--------------------------------------------------------------------------------------------*/ body { font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback"; font-size: 14px; padding: 0 12px; line-height: 22px; word-wrap: break-word; } body.scrollBeyondLastLine { margin-bottom: calc(100vh - 22px); } body.showEditorSelection .code-line { position: relative; } body.showEditorSelection .code-active-line:before, body.showEditorSelection .code-line:hover:before { content: ""; display: block; position: absolute; top: 0; left: -12px; height: 100%; } body.showEditorSelection li.code-active-line:before, body.showEditorSelection li.code-line:hover:before { left: -30px; } .vscode-light.showEditorSelection .code-active-line:before { border-left: 3px solid rgba(0, 0, 0, 0.15); } .vscode-light.showEditorSelection .code-line:hover:before { border-left: 3px solid rgba(0, 0, 0, 0.40); } .vscode-dark.showEditorSelection .code-active-line:before { border-left: 3px solid rgba(255, 255, 255, 0.4); } .vscode-dark.showEditorSelection .code-line:hover:before { border-left: 3px solid rgba(255, 255, 255, 0.60); } .vscode-high-contrast.showEditorSelection .code-active-line:before { border-left: 3px solid rgba(255, 160, 0, 0.7); } .vscode-high-contrast.showEditorSelection .code-line:hover:before { border-left: 3px solid rgba(255, 160, 0, 1); } img { max-width: 100%; max-height: 100%; } a { color: #4080D0; text-decoration: none; } a:focus, input:focus, select:focus, textarea:focus { outline: 1px solid -webkit-focus-ring-color; outline-offset: -1px; } hr { border: 0; height: 2px; border-bottom: 2px solid; } h1 { padding-bottom: 0.3em; line-height: 1.2; border-bottom-width: 1px; border-bottom-style: solid; } h1, h2, h3 { font-weight: normal; } h1 code, h2 code, h3 code, h4 code, h5 code, h6 code { font-size: inherit; line-height: auto; } a:hover { color: #4080D0; text-decoration: underline; } table { border-collapse: collapse; } table > thead > tr > th { text-align: left; border-bottom: 1px solid; } table > thead > tr > th, table > thead > tr > td, table > tbody > tr > th, table > tbody > tr > td { padding: 5px 10px; } table > tbody > tr + tr > td { border-top: 1px solid; } blockquote { margin: 0 7px 0 5px; padding: 0 16px 0 10px; border-left: 5px solid; } code { font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback"; font-size: 14px; line-height: 19px; } body.wordWrap pre { white-space: pre-wrap; } .mac code { font-size: 12px; line-height: 18px; } code > div { padding: 16px; border-radius: 3px; overflow: auto; } /** Theming */ .vscode-light { color: rgb(30, 30, 30); } .vscode-dark { color: #DDD; } .vscode-high-contrast { color: white; } .vscode-light code { color: #A31515; } .vscode-dark code { color: #D7BA7D; } .vscode-light code > div { background-color: rgba(220, 220, 220, 0.4); } .vscode-dark code > div { background-color: rgba(10, 10, 10, 0.4); } .vscode-high-contrast code > div { background-color: rgb(0, 0, 0); } .vscode-high-contrast h1 { border-color: rgb(0, 0, 0); } .vscode-light table > thead > tr > th { border-color: rgba(0, 0, 0, 0.69); } .vscode-dark table > thead > tr > th { border-color: rgba(255, 255, 255, 0.69); } .vscode-light h1, .vscode-light hr, .vscode-light table > tbody > tr + tr > td { border-color: rgba(0, 0, 0, 0.18); } .vscode-dark h1, .vscode-dark hr, .vscode-dark table > tbody > tr + tr > td { border-color: rgba(255, 255, 255, 0.18); } .vscode-light blockquote, .vscode-dark blockquote { background: rgba(127, 127, 127, 0.1); border-color: rgba(0, 122, 204, 0.5); } .vscode-high-contrast blockquote { background: transparent; border-color: #fff; }
+</style>
+<style>
+/* Tomorrow Theme */ /* http://jmblog.github.com/color-themes-for-google-code-highlightjs */ /* Original theme - https://github.com/chriskempson/tomorrow-theme */ /* Tomorrow Comment */ .hljs-comment, .hljs-quote { color: #8e908c; } /* Tomorrow Red */ .hljs-variable, .hljs-template-variable, .hljs-tag, .hljs-name, .hljs-selector-id, .hljs-selector-class, .hljs-regexp, .hljs-deletion { color: #c82829; } /* Tomorrow Orange */ .hljs-number, .hljs-built_in, .hljs-builtin-name, .hljs-literal, .hljs-type, .hljs-params, .hljs-meta, .hljs-link { color: #f5871f; } /* Tomorrow Yellow */ .hljs-attribute { color: #eab700; } /* Tomorrow Green */ .hljs-string, .hljs-symbol, .hljs-bullet, .hljs-addition { color: #718c00; } /* Tomorrow Blue */ .hljs-title, .hljs-section { color: #4271ae; } /* Tomorrow Purple */ .hljs-keyword, .hljs-selector-tag { color: #8959a8; } .hljs { display: block; overflow-x: auto; color: #4d4d4c; padding: 0.5em; } .hljs-emphasis { font-style: italic; } .hljs-strong { font-weight: bold; }
+</style>
+<style>
+ul.contains-task-list { padding-left: 0; } ul ul.contains-task-list { padding-left: 40px; } .task-list-item { list-style-type: none; } .task-list-item-checkbox { vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'HelveticaNeue-Light', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id="proxsox">proxsox</h1>
+<p>proxy server in c using sockets and openssl
+requests to localhost:8080 will return the response of a get request to <a href="http://smu.edu">smu.edu</a>
+this is my submission for <strong>networks homework 6</strong></p>
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+<p><strong>Table of Contents</strong></p>
+<ul>
+<li><a href="#quickstart">quickstart</a></li>
+<li><a href="#output">output</a></li>
+<li><a href="#how-to-run">how to run</a>
+<ul>
+<li><a href="#local-build">local build</a></li>
+<li><a href="#docker-build">docker build</a></li>
+</ul>
+</li>
+<li><a href="#references">references</a></li>
+</ul>
+<!-- markdown-toc end -->
+<h2 id="quickstart">quickstart</h2>
+<p><em>assuming you have docker installed on your computer</em></p>
+<pre><code>docker build -t proxsox .
+docker run -it --rm --name run -p 8080:8080 proxsox
+</code></pre>
+<p>this will start the server listening on port 8080, then follow the onscreen
+prompts for any other info</p>
+<h2 id="output">output</h2>
+<p><strong>Program output while running</strong>
+<img src="file:///c%3A/Users/Jorge/Projects/proxsox/sample-output.png" alt="Sample program output"></p>
+<p><strong>Program response page</strong>
+<img src="file:///c%3A/Users/Jorge/Projects/proxsox/response-page.png" alt="Rendered response page"></p>
+<h2 id="how-to-run">how to run</h2>
+<p>since i have a windows computer, development and testing has been done using
+docker, and so i've included the dockerfile necessary to run and build the program.</p>
+<p>but if you have gcc, libssl-dev, and the ability to use a Makefile, you should
+be able to build locally without an issue.</p>
+<p>if that doesn't work then <strong>please use the docker environment</strong></p>
+<h3 id="local-build">local build</h3>
+<p>If you have make, then you can just use the included Makefile. Simply run <code>make</code>
+and then run the executable as <code>./proxsox</code> and you should be good to go.</p>
+<h3 id="docker-build">docker build</h3>
+<p>If you don't want to build the application locally, then you can also run in
+docker.</p>
+<p>First, build the container with <code>docker build -t proxsox .</code>
+Then, you can run the container with <code>docker run -it --rm --name run -p 8080:8080 proxsox</code></p>
+<h2 id="references">references</h2>
+<ul>
+<li><a href="https://stackoverflow.com/questions/30470505/http-request-using-sockets-in-c?rq=1">stackoverflow thread on http requests in c</a></li>
+<li><a href="https://stackoverflow.com/questions/1484817/how-do-i-make-a-simple-makefile-for-gcc-on-linux">stackoverflow thread on makefiles</a></li>
+<li><a href="https://hub.docker.com/_/gcc/">the gcc docker image</a></li>
+<li><a href="https://stackoverflow.com/questions/6304086/how-to-compile-a-simple-program-with-openssl">compilation flags</a></li>
+<li><a href="https://stackoverflow.com/questions/16255323/make-an-https-request-using-sockets-on-linux">integrating openssl</a></li>
+<li><a href="https://www.openssl.org/docs/man1.1.1/man3/SSL_read.html">the man pages for openssl</a></li>
+<li><a href="https://beej.us/guide/bgnet/html/multi/advanced.html#sonofdataencap">beej's guide to network programming</a></li>
+</ul>
+
+    </body>
+    </html>
