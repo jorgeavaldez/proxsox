@@ -1,5 +1,6 @@
 # proxsox
 proxy server in c using sockets and openssl
+
 requests to localhost:8080 will return the response of a get request to smu.edu
 this is my submission for **networks homework 6**
 
@@ -50,14 +51,21 @@ and then run the executable as `./proxsox` and you should be good to go.
 If you don't want to build the application locally, then you can also run in
 docker.
 
-First, build the container with ```docker build -t proxsox .```
-Then, you can run the container with ```docker run -it --rm --name run -p 8080:8080 proxsox```
+First, build the container with 
+
+```docker build -t proxsox .```
+
+
+Then, you can run the container with 
+
+```docker run -it --rm --name run -p 8080:8080 proxsox```
+
 
 ## references
 - [stackoverflow thread on http requests in c](https://stackoverflow.com/questions/30470505/http-request-using-sockets-in-c?rq=1)
 - [stackoverflow thread on makefiles](https://stackoverflow.com/questions/1484817/how-do-i-make-a-simple-makefile-for-gcc-on-linux)
 - [the gcc docker image](https://hub.docker.com/_/gcc/)
-- [compilation flags](https://stackoverflow.com/questions/6304086/how-to-compile-a-simple-program-with-openssl)
-- [integrating openssl](https://stackoverflow.com/questions/16255323/make-an-https-request-using-sockets-on-linux)
+- [stackoverflow thread on compilation flags](https://stackoverflow.com/questions/6304086/how-to-compile-a-simple-program-with-openssl)
+- [stackoverflow thread on integrating openssl](https://stackoverflow.com/questions/16255323/make-an-https-request-using-sockets-on-linux)
 - [the man pages for openssl](https://www.openssl.org/docs/man1.1.1/man3/SSL_read.html)
 - [beej's guide to network programming](https://beej.us/guide/bgnet/html/multi/advanced.html#sonofdataencap)
